@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card text-center">
+                <img src="~/Content/Images/bookfinal.png" class="card-img-top" height="100" width="400" style="margin: 10px;" alt="Book Ambulance">
+                <div class="card-body">
+                    <h4 class="card-title">Book Ambulance</h4>
+                    <p class="card-text">Booking of an ambulance in a non-emergency situation.</p>
+                    <input type="button" class="btn btn-primary" value="Book Ambulance" onclick="window.location= '@Url.Action("SelectService", "ListDrivers")'" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-center">
+                <img src="~/Content/Images/SOS.png" class="card-img-top" height="100" width="400" style="margin: 10px;" alt="SOS">
+                <div class="card-body">
+                    <h4 class="card-title">SOS</h4>
+                    <p class="card-text">Booking of an ambulance in an emergency situation.</p>
+                    <input type="hidden" name="source" value="BookSOS" />
+                    <a href="@Url.Action("BookingConfirmed", "ListDrivers")" class="btn btn-primary" onclick="showPickUpAddressPrompt()">Book SOS Emergency</a>
+                </div>
+            </div>
+        </div>
+        <script>
+            function showPickUpAddressPrompt() {
+                var pickUpAddress = prompt("Please enter your Pick-Up Address:");
+                if (pickUpAddress) {
+                    localStorage.setItem("pickUpAddress", pickUpAddress);
+                }
+                else {
+                    return false; // Cancel button was clicked, do not proceed
+                }
+            }
+        </script>
+    </div>
+</div>

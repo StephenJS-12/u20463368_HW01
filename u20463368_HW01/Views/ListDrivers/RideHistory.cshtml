@@ -1,0 +1,21 @@
+﻿@model List<u20463368_HW01.Models.BookingModel>
+
+<h3>Ride History</h3>
+
+<div>
+    @foreach (var booking in Model)
+    {
+        <div class="card-title">
+            <h2>@booking.PickUpTime</h2>
+        </div>
+        <div class="card-text">
+            <p>Booking ID: @booking.BookingID</p>
+            <p>Driver Name: @booking.Driver</p>
+            <p>Ambulance Type: @booking.Vehicle</p>
+            <p>Pick-Up Address: @booking.PickUpAddress</p>
+            <button class="button">
+                Go To Booking
+            </button>
+        </div>
+    }
+</div>

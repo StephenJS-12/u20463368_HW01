@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "RegularBookingConfirmed";
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking Confirmed</title>
+    <style>
+        body {
+            font-family: Verdana, Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+            .container img {
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 70%;
+                margin-right: 20px;
+            }
+    </style>
+</head>
+<body>
+    <img src="~/Content/Images/checkmark.png" />
+    <h1>Booking Confirmed</h1>
+
+    <div class="container">
+        <h2>Booking Details</h2>
+        <p>BookingID: <span id="bookingID"></span></p>
+        <p>Date Booked: <span id="dateBooked"></span></p>
+        <p>Pick-Up Time: <span id="pickUpTime"></span></p>
+        <p>Pick-Up Address: <span id="pickUpAddress"></span></p>
+    </div>
+
+    <div class="container">
+        <h2>Driver Details</h2>
+        <div>
+            <img src="~/Content/Images/" />
+            <div>
+                <p>Driver Name: <span id="driverName"></span></p>
+                <p>Driver's Phone Number: <span id="driverPhoneNumber"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Ambulance Details</h2>
+        <div>
+            <img src="ambulance_image.png" alt="Ambulance Image">
+            <div>
+                <p>Ambulance Type: <span id="ambulanceType"></span></p>
+                <p>Registration Number: Registration number goes here</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    // Retrieve data from localStorage
+    var bookingData = JSON.parse(localStorage.getItem("bookingData"));
+
+    // Update elements in the view
+    document.getElementById("bookingID").textContent = bookingData.bookingID;
+    document.getElementById("dateBooked").textContent = bookingData.bookingDate;
+    document.getElementById("pickUpTime").textContent = bookingData.pickUpTime;
+    document.getElementById("pickUpAddress").textContent = bookingData.pickUpAddress;
+    document.getElementById("driverName").textContent = bookingData.driver;
+    document.getElementById("ambulanceType").textContent = bookingData.vehicle;
+    
+
+    // Fetch driver details
+    $.getJSON("/ListDrivers/BookingForm", { driverId: bookingData.driver }, function (data) {
+        if (data !== null) {
+            document.getElementById("driverName").textContent = data.ImageUrl;
+            document.getElementById("driverPhoneNumber").textContent = data.PhoneNumber;
+        }
+    });
+
+</script>
+

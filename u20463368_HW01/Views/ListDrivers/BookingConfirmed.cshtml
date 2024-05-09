@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "BookingConfirmed";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking Confirmed</title>
+    <style>
+        body {
+            font-family: Verdana, Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+            .container img {
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 70%;
+                margin-right: 20px;
+            }
+    </style>
+</head>
+<body>
+    <img src="~/Content/Images/checkmark.png" />
+    <h1>Booking Confirmed</h1>
+    <div class="container">
+        <h2>Booking Details</h2>
+        <p>BookingID: <span id="bookingID">@Model.BookingID</span></p>
+        <p>Date Booked: <span id="dateBooked">@Model.BookingDate</span></p>
+        <p>Pick-Up Time: <span id="pickUpTime">@Model.PickUpTime</span></p>
+        <p>Pick-Up Address: <span id="pickUpAddress">@Model.PickUpAddress</span></p>
+    </div>
+
+    <div class="container">
+        <h2>Driver Details</h2>
+        <div>
+            <img src="@Model.DriverImage" alt="Driver Image" />
+            <div>
+                <p>Driver Name: <span id="driverName">@Model.Driver</span></p>
+                <p>Driver's Phone Number: <span id="driverPhoneNumber">@Model.DriverPhoneNumber</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Ambulance Details</h2>
+        <div>
+            <img src="@Model.VehicleImage" alt="Vehicle Image" />
+            <div>
+                <p>Ambulance Type: <span id="ambulanceType">@Model.VehicleType</span></p>
+                <p>Registration Number: <span id="registrationNumber">@Model.VehicleRegistration</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Retrieve the booking data from the session
+        var bookingData = @Html.Raw(Json.Encode(Session["BookingData"]));
+
+        // Update the DOM elements with the booking data
+        document.getElementById("bookingID").textContent = bookingData.BookingID;
+        document.getElementById("dateBooked").textContent = bookingData.BookingDate;
+        document.getElementById("pickUpTime").textContent = bookingData.PickUpTime;
+        document.getElementById("pickUpAddress").textContent = localStorage.getItem("pickUpAddress");
+        document.getElementById("driverName").textContent = bookingData.Driver;
+        document.getElementById("driverPhoneNumber").textContent = bookingData.DriverPhoneNumber;
+        document.getElementById("ambulanceType").textContent = bookingData.VehicleType;
+        document.getElementById("registrationNumber").textContent = bookingData.VehicleRegistration;
+    </script>
+</body>
+</html>
+
+

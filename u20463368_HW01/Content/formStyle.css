@@ -1,0 +1,120 @@
+﻿/* Wrapper styles */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+/* Navbar styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background-color: #333;
+    color: #fff;
+}
+
+/* Form container styles */
+.form-container {
+    max-width: 600px;
+    margin: 150px auto 10px; /* Adjust the top and bottom margin values as needed */
+    margin-top: 100px;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    display: grid;
+    gap: 10px;
+    text-align: center;
+}
+
+.form-container-other {
+    max-width: 600px;
+    margin: 10px auto 10px; /* Adjust the top and bottom margin values as needed */
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    display: grid;
+    gap: 10px;
+    text-align: center;
+}
+
+    .form-container label {
+        display: inline-block;
+    }
+
+    .form-container input,
+    .form-container select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    .form-container .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        align-items:center;
+    }
+
+    .form-container .form-row--single {
+        grid-template-columns: 1fr;
+    }
+
+    /* Button styles */
+    .form-container .btn-book-ambulance {
+        display: inline-block;
+        width: 100%;
+        max-width: 200px;
+        padding: 10px;
+        text-align: center;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .form-container-other label {
+        display: inline-block;
+    }
+
+    .form-container-other input,
+    .form-container-other select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    .form-container-other .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        align-items:center;
+    }
+
+    .form-container-other .form-row--single {
+        grid-template-columns: 1fr;
+    }
+
+    /* Button styles */
+    .form-container-other .btn-book-ambulance {
+        display: inline-block;
+        width: 100%;
+        max-width: 200px;
+        padding: 10px;
+        text-align: center;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }

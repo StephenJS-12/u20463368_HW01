@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "SelectService";
+}
+
+<h2 style="text-align: center; font-family: Verdana;">Select a Service</h2>
+
+<div class="card-container">
+    <div class="card">
+        <img src="~/Content/Images/ALS.jpg" class="img-center" height="200" width="400" />
+        <div class="card-body">
+            <h4 class="card-title">Advanced Life Support</h4>
+            <p class="card-text">ALS ambulance is staffed by a paramedic and is used to transport patients who require high level of care.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="~/Content/Images/BLS.jpg" class="img-center" height="200" width="400" />
+        <div class="card-body">
+            <h4 class="card-title">Basic Life Support</h4>
+            <p class="card-text">BLS ambulance provides transport to patients who are in a non-life threatening condition.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="~/Content/Images/PT.jpg" class="img-center" height="200" width="400" />
+        <div class="card-body">
+            <h4 class="card-title">Patient Transport</h4>
+            <p class="card-text">The most basic type of transport for patients requiring ambulatory support to and from the hospital.</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="card-container">
+    <div class="card">
+        <img src="~/Content/Images/MUV.jpg" class="img-center" height="200" width="400" />
+        <div class="card-body">
+            <h4 class="card-title">Medical Utility Vehicle</h4>
+            <p class="card-text">A state-of-the-art large van that is designed to facilitate the movement and transport of patients.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="~/Content/Images/EMA.jpg" class="img-center" height="200" width="400" />
+        <div class="card-body">
+            <h4 class="card-title">Event Medical Ambulance</h4>
+            <p class="card-text">Ambulances that are stationed at events, such as concertsm sports games and festivals to provide medical assistance.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="~/Content/Images/AA.png" class="img-center" height="200" width="400" />
+        <div class="card-body">
+            <h4 class="card-title">Air Ambulance</h4>
+            <p class="card-text">Air ambulance helps in the transfer of patients across long distances in both emergency and non-emergency situations</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".card").click(function () {
+            $(this).toggleClass("clicked");
+            var title = $(this).find(".card-title").text();
+            window.location.href = "/ListDrivers/BookingForm?service=" + encodeURIComponent(title);
+        });
+    });
+</script>
+
+
+

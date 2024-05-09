@@ -1,0 +1,389 @@
+﻿
+@model u20463368_HW01.Models.ListDriversViewModel
+
+@{
+    ViewBag.Title = "Management Table";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <meta name="viewport" content="width=device-width" />
+    <title>Management Table</title>
+    <style>
+        .search-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .table-container {
+            margin: 0 auto;
+            width: 80%;
+        }
+
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-container table th,
+        .table-container table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .table-container table th {
+            background-color: #f2f2f2;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+
+        .button-container {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        .button-container button {
+            margin-right: 10px;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center">Driver & Vehicle Management</h1>
+    <div class="container">
+        <div class="search-container">
+            <label for="driverSearch">Search Driver:</label>
+            <input type="text" id="driverSearch" />
+            <select id="serviceDropdown">
+                <option value="">All Services</option>
+                @foreach (var driver in Model.Drivers)
+                {
+                    <option value="@driver.Service">@driver.Service</option>
+                }
+            </select>
+            <button class="btn btn-primary " onclick="highlightRows()">Search</button>
+        </div>
+
+
+        <div class="button-container text-end">
+            <button id="createDriverBtn" class="btn btn-primary">Create Driver</button>
+        </div>
+
+        <div class="table-container">
+            <h2>Driver Table</h2>
+            <table id="driversTable" class="table table-hover table-striped">
+                <tr>
+                    <th>Driver Image</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone Number</th>
+                    <th>Service</th>
+                    <th>Actions</th>
+                </tr>
+                @foreach (var driver in Model.Drivers)
+                {
+                    <tr>
+                        <td><img src="@driver.Image" width="75" height="85" alt="Driver Image" /></td>
+                        <td>@driver.FirstName</td>
+                        <td>@driver.LastName</td>
+                        <td>@driver.PhoneNumber</td>
+                        <td>@driver.Service</td>
+                        <td>
+                            <button class="btn btn-info" style="margin-bottom: 5px;" onclick="editDriver(this)">Update</button>
+                            <br />
+                            <button class="btn btn-danger" onclick="deleteDriver(this)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="button-container text-end">
+            <button id="createVehicleBtn"class="btn btn-primary">Create Vehicle</button>
+        </div>
+
+        <div class="button-container text-end">
+            <button onclick="exportVehicles()" class="btn btn-success">Export Vehicles</button>
+        </div>
+
+
+        <div class="table-container">
+            <h2>Vehicle Table</h2>
+            <table id="vehiclesTable" class="table table-hover table-striped">
+                <tr>
+                    <th>Vehicle Image</th>
+                    <th>Vehicle Type</th>
+                    <th>Vehicle Registration</th>
+                    <th>Vehicle Service</th>
+                    <th>Actions</th>
+                </tr>
+                @foreach (var vehicle in Model.Vehicles)
+                {
+                    <tr>
+                        <td><img src="@vehicle.VehicleImage" width="90" height="70" alt="Vehicle Image" /></td>
+                        <td>@vehicle.VehicleType</td>
+                        <td>@vehicle.VehicleRegistration</td>
+                        <td>@vehicle.VehicleService</td>
+                        <td>
+                            <button class="btn btn-info" style="margin-bottom: 5px;" onclick="editVehicle(this)">Update</button>
+                            <br />
+                            <button class="btn btn-danger" onclick="deleteVehicle(this)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function searchDrivers() {
+            var searchText = document.getElementById("driverSearchInput").value;
+            searchTable("driversTable", searchText);
+        }
+
+        function highlightRows() {
+            var searchText = document.getElementById("driverSearch").value.toLowerCase();
+            var serviceDropdown = document.getElementById("serviceDropdown");
+            var selectedService = serviceDropdown.options[serviceDropdown.selectedIndex].value.toLowerCase();
+
+            var table = document.getElementById("driversTable");
+            var rows = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName("td");
+                var driverName = cells[1].innerText.toLowerCase();
+                var service = cells[4].innerText.toLowerCase();
+
+                var isNameMatch = searchText === "" || driverName.includes(searchText);
+                var isServiceMatch = selectedService === "" || service === selectedService;
+
+                if (isNameMatch && isServiceMatch) {
+                    rows[i].classList.add("highlight");
+                } else {
+                    rows[i].classList.remove("highlight");
+                }
+            }
+        }
+
+
+        function searchVehicles() {
+            var searchText = document.getElementById("vehicleSearchInput").value;
+            searchTable("vehiclesTable", searchText);
+        }
+
+        function searchTable(tableId, searchText) {
+            var table = document.getElementById(tableId);
+            var rows = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName("td");
+                var found = false;
+
+                for (var j = 0; j < cells.length; j++) {
+                    var cell = cells[j];
+                    if (cell.innerHTML.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found) {
+                    rows[i].style.backgroundColor = "yellow";
+                } else {
+                    rows[i].style.backgroundColor = "";
+                }
+            }
+        }
+
+        function exportVehicles() {
+            var vehicles = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Vehicles));
+            var content = "Vehicle List:\n\n";
+
+            for (var i = 0; i < vehicles.length; i++) {
+                var vehicle = vehicles[i];
+                content += "Vehicle Type: " + vehicle.VehicleType + "\n";
+                content += "Vehicle Registration: " + vehicle.VehicleRegistration + "\n";
+                content += "Vehicle Service: " + vehicle.VehicleService + "\n\n";
+            }
+
+            var blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+            saveAs(blob, "vehicle_list.txt");
+        }
+
+        function editDriver(button) {
+            var row = button.parentNode.parentNode;
+            var cells = row.getElementsByTagName("td");
+
+            for (var i = 1; i < cells.length - 1; i++) {
+                var cell = cells[i];
+                var input = document.createElement("input");
+                input.type = "text";
+                input.value = cell.innerHTML;
+                cell.innerHTML = "";
+                cell.appendChild(input);
+            }
+
+            button.innerHTML = "Save";
+            button.classList.remove("btn-info");
+            button.classList.add("btn-success");
+            button.onclick = function () { saveDriver(this); };
+        }
+
+        function saveDriver(button) {
+            var row = button.parentNode.parentNode;
+            var cells = row.getElementsByTagName("td");
+
+            for (var i = 1; i < cells.length - 1; i++) {
+                var cell = cells[i];
+                var input = cell.firstChild;
+                cell.innerHTML = input.value;
+            }
+
+            button.innerHTML = "Update";
+            button.classList.remove("btn-success");
+            button.classList.add("btn-info");
+            button.onclick = function () { editDriver(this); };
+        }
+
+        function deleteDriver(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        function editVehicle(button) {
+            var row = button.parentNode.parentNode;
+            var cells = row.getElementsByTagName("td");
+
+            for (var i = 1; i < cells.length - 1; i++) {
+                var cell = cells[i];
+                var input = document.createElement("input");
+                input.type = "text";
+                input.value = cell.innerHTML;
+                cell.innerHTML = "";
+                cell.appendChild(input);
+            }
+
+            button.innerHTML = "Save";
+            button.classList.remove("btn-info");
+            button.classList.add("btn-success");
+            button.onclick = function () { saveVehicle(this); };
+        }
+
+        function saveVehicle(button) {
+            var row = button.parentNode.parentNode;
+            var cells = row.getElementsByTagName("td");
+
+            for (var i = 1; i < cells.length - 1; i++) {
+                var cell = cells[i];
+                var input = cell.firstChild;
+                cell.innerHTML = input.value;
+            }
+
+            button.innerHTML = "Update";
+            button.classList.remove("btn-success");
+            button.classList.add("btn-info");
+            button.onclick = function () { editVehicle(this); };
+        }
+
+        function deleteVehicle(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        $(document).ready(function () {
+            // Click event handler for "Create Driver" button
+            $("#createDriverBtn").click(function () {
+                // Prompt the user to enter driver details
+                var driverName = prompt("Enter Driver Name:");
+                var driverSurname = prompt("Enter Driver Surname:");
+                var driverPhone = prompt("Enter Driver Phone:");
+                var driverService = prompt("Enter Driver Service:");
+
+                // Create a new driver object
+                var driver = {
+                    Name: driverName,
+                    Surname: driverSurname,
+                    Phone: driverPhone,
+                    Service: driverService
+                };
+
+                // Add the driver to the drivers table
+                addDriverToTable(driver);
+            });
+
+            // Click event handler for "Create Vehicle" button
+            $("#createVehicleBtn").click(function () {
+                // Prompt the user to enter vehicle details
+                var vehicleType = prompt("Enter Vehicle Type:");
+                var vehicleRegistration = prompt("Enter Vehicle Registration:");
+                var vehicleService = prompt("Enter Vehicle Service:");
+
+                // Create a new vehicle object
+                var vehicle = {
+                    Type: vehicleType,
+                    Registration: vehicleRegistration,
+                    Service: vehicleService
+                };
+
+                // Add the vehicle to the vehicles table
+                addVehicleToTable(vehicle);
+            });
+        });
+
+        // Function to add a driver to the drivers table
+        function addDriverToTable(driver) {
+            // Append a new row to the drivers table
+            var newRow = $("<tr></tr>");
+
+            // Create table cells with driver details
+            var imageCell = $("<td></td>").html('<img src="' + driver.Image + '" width="75" height="85" alt="Driver Image" />');
+            var firstNameCell = $("<td></td>").text(driver.Name);
+            var lastNameCell = $("<td></td>").text(driver.Surname);
+            var phoneCell = $("<td></td>").text(driver.Phone);
+            var serviceCell = $("<td></td>").text(driver.Service);
+            var actionsCell = $("<td></td>").html('<button class="btn btn-info" style="margin-bottom: 5px;" onclick="editDriver(this)">Update</button><br /><button class="btn btn-danger" onclick="deleteDriver(this)">Delete</button>');
+
+            // Append cells to the row
+            newRow.append(imageCell, firstNameCell, lastNameCell, phoneCell, serviceCell, actionsCell);
+
+            // Append the row to the drivers table
+            $("#driversTable").append(newRow);
+        }
+
+        // Function to add a vehicle to the vehicles table
+        function addVehicleToTable(vehicle) {
+            // Append a new row to the vehicles table
+            var newRow = $("<tr></tr>");
+
+            // Create table cells with vehicle details
+            var imageCell = $("<td></td>").html('<img src="' + vehicle.VehicleImage + '" width="90" height="70" alt="Vehicle Image" />');
+            var typeCell = $("<td></td>").text(vehicle.Type);
+            var registrationCell = $("<td></td>").text(vehicle.Registration);
+            var serviceCell = $("<td></td>").text(vehicle.Service);
+            var actionsCell = $("<td></td>").html('<button class="btn btn-info" style="margin-bottom: 5px;" onclick="editVehicle(this)">Update</button><br /><button class="btn btn-danger" onclick="deleteVehicle(this)">Delete</button>');
+
+            // Append cells to the row
+            newRow.append(imageCell, typeCell, registrationCell, serviceCell, actionsCell);
+
+            // Append the row to the vehicles table
+            $("#vehiclesTable").append(newRow);
+        }
+
+    </script>
+</body>
+</html>

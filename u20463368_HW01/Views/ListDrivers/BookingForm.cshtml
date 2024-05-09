@@ -1,0 +1,763 @@
+﻿<head>
+    <link href="~/Content/formStyle.css" rel="stylesheet" />
+    <link href="~/Content/site.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .btn {
+            width: 100%;
+        }
+
+        .btnContainer {
+            display: flex;
+            place-content: center;
+            place-items: center;
+            flex-direction: column;
+        }
+
+        #pickUpAddress {
+            width: 100%;
+        }
+    </style>
+</head>
+@model u20463368_HW01.Models.ListDriversViewModel
+@{
+    ViewBag.Title = "BookingForm";
+}
+@{
+    var selectedService = Request.QueryString["service"];
+}
+
+
+@if (selectedService == "Advanced Life Support")
+{
+<form id="bookingForm">
+    <div class="form-container">
+        <h3>Booking Form - Advanced Life Support</h3>
+        <div class="form-row">
+            <div>
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div>
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container-other">
+        <div class="form-row">
+            <div>
+                <label for="pickUpTime">Pick-Up Time:</label>
+                <input type="time" id="pickUpTime" name="pickUpTime" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div>
+                <label for="reason">Reason for Pickup:</label>
+                <select id="reason" name="reason" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a reason</option>
+                    <option value="Reason 1">Accident</option>
+                    <option value="Reason 2">Sickness or Disease</option>
+                    <option value="Reason 3">Surgery</option>
+                    <option value="Reason 4">Pregnancy</option>
+                    <option value="Reason 5">Checkup</option>
+                    <option value="Reason 5">Mental Health Breakdown</option>
+                    <option value="Reason 5">Other</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-container-other">
+        <div class="form-row">
+            <div>
+                <label for="vehicle">Vehicle:</label>
+                <select id="vehicle" name="vehicle" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a vehicle</option>
+                    <option value="Vehicle 1">Ambulance 1</option>
+                </select>
+            </div>
+            <div>
+                <label for="driver">Driver:</label>
+                <select id="driver" name="driver" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a driver</option>
+                    <option value="Driver 1">Abigail dos Santos</option>
+                    <option value="Driver 9">Emma Parker</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container-other btnContainer">
+        <label for="pickUpAddress">Pick-Up Address:</label>
+        <input type="text" id="pickUpAddress" name="pickUpAddress" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%;">
+    </div>
+    <input type="hidden" id="bookingData "name="bookingData" value="BookAmbulance" />
+    <div class="col-md-12 btnContainer">
+        <button type="submit" id="bookAmbulance" class="btn btn-primary">Book Ambulance</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#bookingForm").submit(function (event) {
+            event.preventDefault();
+
+            // Get form values
+            var fullName = $("#fullName").val();
+            var phoneNumber = $("#phoneNumber").val();
+            var pickUpTime = $("#pickUpTime").val();
+            var reason = $("#reason").val();
+            var vehicle = $("#vehicle").val();
+            var driver = $("#driver").val();
+            var pickUpAddress = $("#pickUpAddress").val();
+
+            // Create a new Date object to get the current date
+            var currentDate = new Date();
+
+            // Generate a unique identifier (BookingID)
+            var bookingID = generateBookingID();
+
+            // Create an object to store the form data
+            var bookingData = {
+                fullName: fullName,
+                phoneNumber: phoneNumber,
+                pickUpTime: pickUpTime,
+                reason: reason,
+                vehicle: vehicle,
+                driver: driver,
+                pickUpAddress: pickUpAddress,
+                bookingDate: currentDate.toDateString(), // Store the full date (no time)
+                bookingID: bookingID, // Store the unique identifier
+            };
+
+            // Save calculated variables to localStorage
+            localStorage.setItem("bookingID", bookingID);
+            localStorage.setItem("currentDate", currentDate.toDateString());
+
+            // Save the form data to localStorage
+            localStorage.setItem("bookingData", JSON.stringify(bookingData));
+
+            $("#bookingData").val(JSON.stringify(bookingData));
+
+            // Redirect to a success or confirmation page
+            window.location.href = "/ListDrivers/RegularBookingConfirmed";
+        });
+    });
+
+    // Function to generate a unique global identifier (BookingID)
+    function generateBookingID() {
+        var timestamp = Date.now().toString(36); // Convert current timestamp to base36 string
+        var randomNum = Math.random().toString(36).substr(2, 5); // Generate random number and convert to base36 string
+        var uniqueID = timestamp + randomNum;
+
+        return uniqueID;
+    }
+</script>
+
+}
+else if (selectedService == "Basic Life Support")
+{
+<form id="bookingForm">
+    <div class="form-container">
+        <h3>Booking Form - Basic Life Support</h3>
+        <div class="form-row">
+            <div>
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div>
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container-other">
+        <div class="form-row">
+            <div>
+                <label for="pickUpTime">Pick-Up Time:</label>
+                <input type="time" id="pickUpTime" name="pickUpTime" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div>
+                <label for="reason">Reason for Pickup:</label>
+                <select id="reason" name="reason" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a reason</option>
+                    <option value="Reason 1">Accident</option>
+                    <option value="Reason 2">Sickness or Disease</option>
+                    <option value="Reason 3">Surgery</option>
+                    <option value="Reason 4">Pregnancy</option>
+                    <option value="Reason 5">Checkup</option>
+                    <option value="Reason 5">Mental Health Breakdown</option>
+                    <option value="Reason 5">Other</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-container-other">
+        <div class="form-row">
+            <div>
+                <label for="vehicle">Vehicle:</label>
+                <select id="vehicle" name="vehicle" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a vehicle</option>
+                    <option value="Vehicle 1">Medical SUV 1</option>
+                </select>
+            </div>
+            <div>
+                <label for="driver">Driver:</label>
+                <select id="driver" name="driver" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a driver</option>
+                    <option value="Driver 2">Ethan Ramirez</option>
+                    <option value="Driver 7">Masindi Mhlahleki</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container-other btnContainer">
+        <label for="pickUpAddress">Pick-Up Address:</label>
+        <input type="text" id="pickUpAddress" name="pickUpAddress" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%;">
+    </div>
+    <input type="hidden" name="source" value="BookAmbulance" />
+    <div class="col-md-12 btnContainer">
+        <button type="submit" id="bookAmbulance" class="btn btn-primary">Book Ambulance</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#bookingForm").submit(function (event) {
+            event.preventDefault();
+
+            // Get form values
+            var fullName = $("#fullName").val();
+            var phoneNumber = $("#phoneNumber").val();
+            var pickUpTime = $("#pickUpTime").val();
+            var reason = $("#reason").val();
+            var vehicle = $("#vehicle").val();
+            var driver = $("#driver").val();
+            var pickUpAddress = $("#pickUpAddress").val();
+
+            // Create a new Date object to get the current date
+            var currentDate = new Date();
+
+            // Generate a unique identifier (BookingID)
+            var bookingID = generateBookingID();
+
+            // Create an object to store the form data
+            var bookingData = {
+                fullName: fullName,
+                phoneNumber: phoneNumber,
+                pickUpTime: pickUpTime,
+                reason: reason,
+                vehicle: vehicle,
+                driver: driver,
+                pickUpAddress: pickUpAddress,
+                bookingDate: currentDate.toDateString(), // Store the full date (no time)
+                bookingID: bookingID, // Store the unique identifier
+            };
+
+            // Save calculated variables to localStorage
+            localStorage.setItem("bookingID", bookingID);
+            localStorage.setItem("currentDate", currentDate.toDateString());
+
+            // Save the form data to localStorage
+            localStorage.setItem("bookingData", JSON.stringify(bookingData));
+
+            // Redirect to a success or confirmation page
+            window.location.href = "/ListDrivers/RegularBookingConfirmed";
+        });
+    });
+
+    // Function to generate a unique global identifier (BookingID)
+    function generateBookingID() {
+        var timestamp = Date.now().toString(36); // Convert current timestamp to base36 string
+        var randomNum = Math.random().toString(36).substr(2, 5); // Generate random number and convert to base36 string
+        var uniqueID = timestamp + randomNum;
+
+        return uniqueID;
+    }
+</script>
+
+}
+else if (selectedService == "Patient Transport")
+{
+<form id="bookingForm">
+    <div class="form-container">
+        <h3>Booking Form - Patient Transport</h3>
+        <div class="form-row">
+            <div>
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div>
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container-other">
+        <div class="form-row">
+            <div>
+                <label for="pickUpTime">Pick-Up Time:</label>
+                <input type="time" id="pickUpTime" name="pickUpTime" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div>
+                <label for="reason">Reason for Pickup:</label>
+                <select id="reason" name="reason" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a reason</option>
+                    <option value="Reason 1">Accident</option>
+                    <option value="Reason 2">Sickness or Disease</option>
+                    <option value="Reason 3">Surgery</option>
+                    <option value="Reason 4">Pregnancy</option>
+                    <option value="Reason 5">Checkup</option>
+                    <option value="Reason 5">Mental Health Breakdown</option>
+                    <option value="Reason 5">Other</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-container-other">
+        <div class="form-row">
+            <div>
+                <label for="vehicle">Vehicle:</label>
+                <select id="vehicle" name="vehicle" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a vehicle</option>
+                    <option value="Vehicle 4">Shuttle 1</option>
+                </select>
+            </div>
+            <div>
+                <label for="driver">Driver:</label>
+                <select id="driver" name="driver" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a driver</option>
+                    <option value="Driver 3">Kamlika Patel</option>
+                    <option value="Driver 8">Lucas Johnson</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container-other btnContainer">
+        <label for="pickUpAddress">Pick-Up Address:</label>
+        <input type="text" id="pickUpAddress" name="pickUpAddress" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%;">
+    </div>
+    <input type="hidden" name="source" value="BookAmbulance" />
+
+    <div class="col-md-12 btnContainer">
+        <button type="submit" id="bookAmbulance" class="btn btn-primary">Book Ambulance</button>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        $("#bookingForm").submit(function (event) {
+            event.preventDefault();
+
+            // Get form values
+            var fullName = $("#fullName").val();
+            var phoneNumber = $("#phoneNumber").val();
+            var pickUpTime = $("#pickUpTime").val();
+            var reason = $("#reason").val();
+            var vehicle = $("#vehicle").val();
+            var driver = $("#driver").val();
+            var pickUpAddress = $("#pickUpAddress").val();
+
+            // Create a new Date object to get the current date
+            var currentDate = new Date();
+
+            // Generate a unique identifier (BookingID)
+            var bookingID = generateBookingID();
+
+            // Create an object to store the form data
+            var bookingData = {
+                fullName: fullName,
+                phoneNumber: phoneNumber,
+                pickUpTime: pickUpTime,
+                reason: reason,
+                vehicle: vehicle,
+                driver: driver,
+                pickUpAddress: pickUpAddress,
+                bookingDate: currentDate.toDateString(), // Store the full date (no time)
+                bookingID: bookingID, // Store the unique identifier
+            };
+
+            // Save the form data to localStorage
+            localStorage.setItem("bookingData", JSON.stringify(bookingData));
+
+            // Redirect to a success or confirmation page
+            window.location.href = "/ListDrivers/RegularBookingConfirmed";
+        });
+    });
+
+    // Function to generate a unique global identifier (BookingID)
+    function generateBookingID() {
+        var timestamp = Date.now().toString(36); // Convert current timestamp to base36 string
+        var randomNum = Math.random().toString(36).substr(2, 5); // Generate random number and convert to base36 string
+        var uniqueID = timestamp + randomNum;
+
+        return uniqueID;
+    }
+</script>
+
+}
+else if (selectedService == "Medical Utility Vehicle")
+{
+<form id="bookingForm">
+    <div class="form-container">
+        <h3>Booking Form - Medical Utility Vehicle</h3>
+        <div class="form-row">
+            <div>
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div>
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container-other">
+        <div class="form-row">
+            <div>
+                <label for="pickUpTime">Pick-Up Time:</label>
+                <input type="time" id="pickUpTime" name="pickUpTime" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div>
+                <label for="reason">Reason for Pickup:</label>
+                <select id="reason" name="reason" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a reason</option>
+                    <option value="Reason 1">Accident</option>
+                    <option value="Reason 2">Sickness or Disease</option>
+                    <option value="Reason 3">Surgery</option>
+                    <option value="Reason 4">Pregnancy</option>
+                    <option value="Reason 5">Checkup</option>
+                    <option value="Reason 5">Mental Health Breakdown</option>
+                    <option value="Reason 5">Other</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-container-other">
+        <div class="form-row">
+            <div>
+                <label for="vehicle">Vehicle:</label>
+                <select id="vehicle" name="vehicle" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a vehicle</option>
+                    <option value="Vehicle 1">Ambulance 2</option>
+                </select>
+            </div>
+            <div>
+                <label for="driver">Driver:</label>
+                <select id="driver" name="driver" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a driver</option>
+                    <option value="Driver 4">Liam Thompson</option>
+                    <option value="Driver 10">Kivesh Padarath</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container-other btnContainer">
+        <label for="pickUpAddress">Pick-Up Address:</label>
+        <input type="text" id="pickUpAddress" name="pickUpAddress" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%;">
+    </div>
+    <input type="hidden" name="source" value="BookAmbulance" />
+    <div class="col-md-12 btnContainer">
+        <button type="submit" id="bookAmbulance" class="btn btn-primary">Book Ambulance</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#bookingForm").submit(function (event) {
+            event.preventDefault();
+
+            // Get form values
+            var fullName = $("#fullName").val();
+            var phoneNumber = $("#phoneNumber").val();
+            var pickUpTime = $("#pickUpTime").val();
+            var reason = $("#reason").val();
+            var vehicle = $("#vehicle").val();
+            var driver = $("#driver").val();
+            var pickUpAddress = $("#pickUpAddress").val();
+
+            // Create a new Date object to get the current date
+            var currentDate = new Date();
+
+            // Generate a unique identifier (BookingID)
+            var bookingID = generateBookingID();
+
+            // Create an object to store the form data
+            var bookingData = {
+                fullName: fullName,
+                phoneNumber: phoneNumber,
+                pickUpTime: pickUpTime,
+                reason: reason,
+                vehicle: vehicle,
+                driver: driver,
+                pickUpAddress: pickUpAddress,
+                bookingDate: currentDate.toDateString(), // Store the full date (no time)
+                bookingID: bookingID, // Store the unique identifier
+            };
+
+            // Save the form data to localStorage
+            localStorage.setItem("bookingData", JSON.stringify(bookingData));
+
+            // Redirect to a success or confirmation page
+            window.location.href = "/ListDrivers/RegularBookingConfirmed";
+        });
+    });
+
+    // Function to generate a unique global identifier (BookingID)
+    function generateBookingID() {
+        var timestamp = Date.now().toString(36); // Convert current timestamp to base36 string
+        var randomNum = Math.random().toString(36).substr(2, 5); // Generate random number and convert to base36 string
+        var uniqueID = timestamp + randomNum;
+
+        return uniqueID;
+    }
+</script>
+
+}
+else if (selectedService == "Event Medical Ambulance")
+{
+<form id="bookingForm">
+    <div class="form-container">
+        <h3>Booking Form - Event Medical Ambulance</h3>
+        <div class="form-row">
+            <div>
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div>
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container-other">
+        <div class="form-row">
+            <div>
+                <label for="pickUpTime">Pick-Up Time:</label>
+                <input type="time" id="pickUpTime" name="pickUpTime" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div>
+                <label for="reason">Reason for Pickup:</label>
+                <select id="reason" name="reason" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a reason</option>
+                    <option value="Reason 1">Accident</option>
+                    <option value="Reason 2">Sickness or Disease</option>
+                    <option value="Reason 3">Surgery</option>
+                    <option value="Reason 4">Pregnancy</option>
+                    <option value="Reason 5">Checkup</option>
+                    <option value="Reason 5">Mental Health Breakdown</option>
+                    <option value="Reason 5">Other</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-container-other">
+        <div class="form-row">
+            <div>
+                <label for="vehicle">Vehicle:</label>
+                <select id="vehicle" name="vehicle" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a vehicle</option>
+                    <option value="Vehicle 1">Ambulance 3</option>
+                </select>
+            </div>
+            <div>
+                <label for="driver">Driver:</label>
+                <select id="driver" name="driver" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a driver</option>
+                    <option value="Driver 5">Ava Nguyen</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container-other btnContainer">
+        <label for="pickUpAddress">Pick-Up Address:</label>
+        <input type="text" id="pickUpAddress" name="pickUpAddress" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%;">
+    </div>
+    <input type="hidden" name="source" value="BookAmbulance" />
+    <div class="col-md-12 btnContainer">
+        <button type="submit" id="bookAmbulance" class="btn btn-primary">Book Ambulance</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#bookingForm").submit(function (event) {
+            event.preventDefault();
+
+            // Get form values
+            var fullName = $("#fullName").val();
+            var phoneNumber = $("#phoneNumber").val();
+            var pickUpTime = $("#pickUpTime").val();
+            var reason = $("#reason").val();
+            var vehicle = $("#vehicle").val();
+            var driver = $("#driver").val();
+            var pickUpAddress = $("#pickUpAddress").val();
+
+            // Create a new Date object to get the current date
+            var currentDate = new Date();
+
+            // Generate a unique identifier (BookingID)
+            var bookingID = generateBookingID();
+
+            // Create an object to store the form data
+            var bookingData = {
+                fullName: fullName,
+                phoneNumber: phoneNumber,
+                pickUpTime: pickUpTime,
+                reason: reason,
+                vehicle: vehicle,
+                driver: driver,
+                pickUpAddress: pickUpAddress,
+                bookingDate: currentDate.toDateString(), // Store the full date (no time)
+                bookingID: bookingID, // Store the unique identifier
+            };
+
+            // Save the form data to localStorage
+            localStorage.setItem("bookingData", JSON.stringify(bookingData));
+
+            // Redirect to a success or confirmation page
+            window.location.href = "/ListDrivers/RegularBookingConfirmed";
+        });
+    });
+
+    // Function to generate a unique global identifier (BookingID)
+    function generateBookingID() {
+        var timestamp = Date.now().toString(36); // Convert current timestamp to base36 string
+        var randomNum = Math.random().toString(36).substr(2, 5); // Generate random number and convert to base36 string
+        var uniqueID = timestamp + randomNum;
+
+        return uniqueID;
+    }
+</script>
+}
+else if (selectedService == "Air Ambulance")
+{
+<form id="bookingForm">
+    <div class="form-container">
+        <h3>Booking Form - Air Ambulance</h3>
+        <div class="form-row">
+            <div>
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div>
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container-other">
+        <div class="form-row">
+            <div>
+                <label for="pickUpTime">Pick-Up Time:</label>
+                <input type="time" id="pickUpTime" name="pickUpTime" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            </div>
+            <div>
+                <label for="reason">Reason for Pickup:</label>
+                <select id="reason" name="reason" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a reason</option>
+                    <option value="Reason 1">Accident</option>
+                    <option value="Reason 2">Sickness or Disease</option>
+                    <option value="Reason 3">Surgery</option>
+                    <option value="Reason 4">Pregnancy</option>
+                    <option value="Reason 5">Checkup</option>
+                    <option value="Reason 5">Mental Health Breakdown</option>
+                    <option value="Reason 5">Other</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-container-other">
+        <div class="form-row">
+            <div>
+                <label for="vehicle">Vehicle:</label>
+                <select id="vehicle" name="vehicle" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a vehicle</option>
+                    <option value="Vehicle 1">Helicopter</option>
+                </select>
+            </div>
+            <div>
+                <label for="driver">Driver:</label>
+                <select id="driver" name="driver" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="">Select a driver</option>
+                    <option value="Driver 6">Musa Mokwena</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container-other btnContainer">
+        <label for="pickUpAddress">Pick-Up Address:</label>
+        <input type="text" id="pickUpAddress" name="pickUpAddress" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%;">
+    </div>
+    <input type="hidden" name="source" value="BookAmbulance" />
+    <div class="col-md-12 btnContainer">
+        <button type="submit" id="bookAmbulance" class="btn btn-primary">Book Ambulance</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#bookingForm").submit(function (event) {
+            event.preventDefault();
+
+            // Get form values
+            var fullName = $("#fullName").val();
+            var phoneNumber = $("#phoneNumber").val();
+            var pickUpTime = $("#pickUpTime").val();
+            var reason = $("#reason").val();
+            var vehicle = $("#vehicle").val();
+            var driver = $("#driver").val();
+            var pickUpAddress = $("#pickUpAddress").val();
+
+            // Create a new Date object to get the current date
+            var currentDate = new Date();
+
+            // Generate a unique identifier (BookingID)
+            var bookingID = generateBookingID();
+
+            // Create an object to store the form data
+            var bookingData = {
+                fullName: fullName,
+                phoneNumber: phoneNumber,
+                pickUpTime: pickUpTime,
+                reason: reason,
+                vehicle: vehicle,
+                driver: driver,
+                pickUpAddress: pickUpAddress,
+                bookingDate: currentDate.toDateString(), // Store the full date (no time)
+                bookingID: bookingID, // Store the unique identifier
+            };
+
+            // Save the form data to localStorage
+            localStorage.setItem("bookingData", JSON.stringify(bookingData));
+
+            // Redirect to a success or confirmation page
+            window.location.href = "/ListDrivers/RegularBookingConfirmed";
+        });
+    });
+
+    // Function to generate a unique global identifier (BookingID)
+    function generateBookingID() {
+        var timestamp = Date.now().toString(36); // Convert current timestamp to base36 string
+        var randomNum = Math.random().toString(36).substr(2, 5); // Generate random number and convert to base36 string
+        var uniqueID = timestamp + randomNum;
+
+        return uniqueID;
+    }
+</script>
+}
+else
+{
+<div style="height: 100px; width: 100%;">
+
+</div>
+<h2>Invalid service selected</h2>
+} 
